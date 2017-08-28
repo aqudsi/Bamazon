@@ -1,0 +1,24 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": " SQL project",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "inquirer": "^3.2.2",
+    "mysql": "^2.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aqudsi/Bamazon.git"
+  },
+  "author": "Ahmer Qudsi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aqudsi/Bamazon/issues"
+  },
+  "homepage": "https://github.com/aqudsi/Bamazon#readme"
+}
