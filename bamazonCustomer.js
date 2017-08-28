@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var consoleTable = require('console.table');
 var price;
 var quantity;
 var total;
@@ -7,6 +8,7 @@ var stock;
 var product;
 var id;
 var remaining_stock;
+var products = [];
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -33,9 +35,12 @@ function displayProducts() {
   connection.query("SELECT item_id, product_name, price, stock_quantity from products", function(err, response){
       
     for(var i = 0; i < response.length; i++){
-      console.log("\n Item number: " + response[i].item_id + "      Item name: " + response[i].product_name + "      Item price: $" + response[i].price + "     In stock: " + response[i].stock_quantity);
-    };
+      
+      products[i] = [response[i].item_id, response[i].product_name, "$"+response[i].price, response[i].stock_quantity];
 
+    };
+    console.table(["Item ID", "Product Name", "Price", "Stock"], products)
+      
     buyProduct();
   });
 
@@ -71,11 +76,11 @@ function displayProducts() {
 
               if(stock > quantity)
                 {
-                  console.log("")
+                  console.log("");
                   console.log("You sucessfully purchased " + quantity + " " + product + "(s)");
                   console.log("Your total for this purchase is: $" + total);
                   console.log("Remaining stock: " + remaining_stock);
-                  console.log("")
+                  console.log("");
 
                   connection.query(
                     "UPDATE products SET ? WHERE ?",

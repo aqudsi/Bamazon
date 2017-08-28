@@ -1,10 +1,14 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var consoleTable = require('console.table');
 var addInventory;
 var price;
 var stock;
 var product;
 var id;
+var inventory = [];
+var inventoryLow = [];
+
 
 
 // create the connection information for the sql database
@@ -35,8 +39,11 @@ function productsForSale(){
 	connection.query("SELECT item_id, product_name, price, stock_quantity from products", function(err, response){
       
     for(var i = 0; i < response.length; i++){
-      console.log("\n Item number: " + response[i].item_id + "      Item name: " + response[i].product_name + "      Item price: $" + response[i].price + "     In stock: " + response[i].stock_quantity);
+      
+      inventory[i] = [response[i].item_id, response[i].product_name, "$"+response[i].price, response[i].stock_quantity];
+
     };
+    console.table(["Item ID", "Product Name", "Price", "Stock"], inventory)
     restart();
   });
   
@@ -45,14 +52,14 @@ function productsForSale(){
 function lowInventory(){
 	console.log("")
 	console.log("Low Inventory:")
+	console.log("")
 		connection.query("SELECT item_id, product_name, price, stock_quantity from products", function(err, response){
-			for(var i = 0; i < response.length; i++)
-			{      
-			    if(response[i].stock_quantity < 5)
-			    {
-				    console.log("\n Item number: " + response[i].item_id + "      Item name: " + response[i].product_name + "      Item price: $" + response[i].price + "     In stock: " + response[i].stock_quantity);
-			    }
-			}
+			for(var i = 0; i < response.length; i++){
+		      if(response[i].stock_quantity < 5){
+		      	inventoryLow[i] = [response[i].item_id, response[i].product_name, "$"+response[i].price, response[i].stock_quantity];
+		  	  }
+		    };
+   		 	console.table(["Item ID", "Product Name", "Price", "Stock"], inventoryLow)
 			console.log("")
 			  inquirer.
 			    prompt([
@@ -80,6 +87,7 @@ function lowInventory(){
 function addToInventory(){
 	console.log("")
 	console.log("Add to Inventory:")
+	console.log("")
 
 	inquirer
      .prompt([
@@ -104,7 +112,6 @@ function addToInventory(){
 		      	addInventory = parseInt(quantity + stock);
 		      	id = answer.product;
 		      
-		      
 		  connection.query(
             "UPDATE products SET ? WHERE ?",
 	            [
@@ -126,6 +133,7 @@ function addToInventory(){
 function addNewProduct(){
 	console.log("")
 	console.log("Add New Product")
+	console.log("")
 
 	inquirer
      .prompt([
